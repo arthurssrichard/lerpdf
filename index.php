@@ -20,8 +20,8 @@
         $textCapitulos = getPagesArray([5,6,7,8,9], $pdf); 
         $textCapitulos = filterIndex($textCapitulos, "MENSAGENS","289");
 
-        exibirMensagem($textCapitulos, $pdf, "Tornai vossas vidas o mais simples possível");
-        //exibirMensagem($textCapitulos, $pdf, "E a terra sofre!");
+        //exibirMensagem($textCapitulos, $pdf, "Um guerreiro da luz não pode ser pego de surpresa");
+        exibirMensagem($textCapitulos, $pdf, "E a terra sofre!");
 
         //echo"sex";
         /* FUNÇÕES */
@@ -78,7 +78,7 @@
             $text = preg_replace("/([A-Z]+)\s\s\s([A-Z]+)/", "$1 $2", $text);
 
             $titleChapter = strtoupper($title);
-            $pattern2 = "/($titleChapter.*?)(?=\d+\.\s|$|\.{3,})/siu"; //"/([\S\s]*)/" para testar tudo
+            $pattern2 = "/($titleChapter.*?)(?=\d+\.\s|$|\.{4,})/siu"; //"/([\S\s]*)/" para testar tudo
             //$pattern2 = "/(\d+\s\d+\.\sTORNAI VOSSAS VIDAS O MAIS\s+SIMPLES POSSÍVEL)/";
             if(preg_match($pattern2, $text, $matches)){
                 $capitulo =  $matches[1];
