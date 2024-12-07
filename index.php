@@ -12,7 +12,7 @@
         require __DIR__ . '/vendor/autoload.php';
         use Smalot\PdfParser\Parser;
         // CÓDIGO BÁSICO
-        $path = 'C:\Users\arthu\desktop\transicao1.pdf';
+        $path = './transicao1.pdf';
         $parser = new Parser();
         $pdf = $parser->parseFile($path);
 
@@ -74,10 +74,12 @@
             }
             
             echo "<br><br>Texto original: <br> $text";
+            
+            $text = preg_replace("/([A-Z]+)\s\s\s([A-Z]+)/", "$1 $2", $text);
 
-            $titleChapter =  "TORNAI VOSSAS VIDAS O MAIS SIMPLES POSSÍVEL"; //strtoupper($title);
-            //$pattern2 = "/($titleChapter.*?)(?=\d+\.\s|$|\.{3,})/siu"; //"/([\S\s]*)/" para testar tudo
-            $pattern2 = "/.*?($titleChapter.?*)/";
+            $titleChapter = strtoupper($title);
+            $pattern2 = "/($titleChapter.*?)(?=\d+\.\s|$|\.{3,})/siu"; //"/([\S\s]*)/" para testar tudo
+            //$pattern2 = "/(\d+\s\d+\.\sTORNAI VOSSAS VIDAS O MAIS\s+SIMPLES POSSÍVEL)/";
             if(preg_match($pattern2, $text, $matches)){
                 $capitulo =  $matches[1];
             }
