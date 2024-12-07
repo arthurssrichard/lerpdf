@@ -21,8 +21,9 @@
         $textCapitulos = filterIndex($textCapitulos, "MENSAGENS","289");
 
         //exibirMensagem($textCapitulos, $pdf, "Um guerreiro da luz não pode ser pego de surpresa");
-        exibirMensagem($textCapitulos, $pdf, "E a terra sofre!");
+        exibirMensagem($textCapitulos, $pdf, "Aquele que tiver olhos de ver, que veja!");
 
+        echo "<br><br><br><br>".$textCapitulos;
         //echo"sex";
         /* FUNÇÕES */
         function getPagesArray($array, $pdf){
@@ -32,7 +33,7 @@
             }
             return $text;
         }
-
+        
         function filterChapter($text, $start, $end){
             $startPos = strpos($text, $start);
             $endPos = strpos($text, $end);
@@ -57,10 +58,10 @@
 
         function exibirMensagem($listMessages, $pdf, $title){
 
-            // pega as páginas do capítulo (onde começa e onde termina)
-            $title = preg_quote($title, '/');
-
-            $pattern1 = "/$title.*?(\d+)\s\d+\.\s*.*?(\d+)/";
+            // Ajuste o padrão para capturar múltiplas linhas
+            $escapedTitle = preg_quote($title, "/");
+            $escapedTitle = preg_replace('/\s+/','\\s*',$escapedTitle);
+            $pattern1 = '/'.$escapedTitle.'[\s\S]*?(\d+)\s\d+\.\s*[\s\S]*?(\d+)/';
             $pages = null;
             if(preg_match($pattern1, $listMessages, $matches)){
                 $pages = [$matches[1],$matches[2]];
