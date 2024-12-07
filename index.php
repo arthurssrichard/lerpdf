@@ -21,10 +21,11 @@
         $textCapitulos = filterIndex($textCapitulos, "MENSAGENS","289");
 
         //exibirMensagem($textCapitulos, $pdf, "Um guerreiro da luz não pode ser pego de surpresa");
-        exibirMensagem($textCapitulos, $pdf, "Aquele que tiver olhos de ver, que veja!");
+        exibirMensagem($textCapitulos, $pdf, "Acordai, irmãos. O final de tempos é uma realidade que
+não podeis ignorar");
 
         echo "<br><br><br><br>".$textCapitulos;
-        //echo"sex";
+        
         /* FUNÇÕES */
         function getPagesArray($array, $pdf){
             $text = '';
@@ -45,20 +46,35 @@
             return substr($text, $startPos);
         }
 
-        function filterIndex($text, $start, $end){
+        function filterIndex($text, $start, $end) {
             $startPos = strpos($text, $start) + strlen($start);
-            $endPos = strpos($text, $end) + strlen($end);
-
-            if($endPos !== false){
-                return substr($text, $startPos, $endPos - $startPos);
-            }
-
-            return substr($text, $startPos);
+            $endPos = strpos($text, $end);
+        
+            // Extrai o texto entre o início e o fim
+            $extractedText = ($endPos !== false)
+                ? substr($text, $startPos, $endPos - $startPos)
+                : substr($text, $startPos);
+        
+            // Normaliza o índice: une linhas quebradas
+            return normalizeIndex($extractedText);
         }
+        
+        function normalizeIndex($text) {
+            // Remove quebras de linha seguidas de espaços
+            $text = preg_replace('/\n\s*/', ' ', $text);
+        
+            // Remove espaços extras
+            $text = preg_replace('/\s+/', ' ', $text);
+        
+            // Retorna o índice normalizado
+            return trim($text);
+        }
+        
 
         function exibirMensagem($listMessages, $pdf, $title){
 
             // Ajuste o padrão para capturar múltiplas linhas
+            
             $escapedTitle = preg_quote($title, "/");
             $escapedTitle = preg_replace('/\s+/','\\s*',$escapedTitle);
             $pattern1 = '/'.$escapedTitle.'[\s\S]*?(\d+)\s\d+\.\s*[\s\S]*?(\d+)/';
@@ -77,18 +93,32 @@
             echo "<br><br>Texto original: <br> $text";
             
             $text = preg_replace("/([A-Z]+)\s\s\s([A-Z]+)/", "$1 $2", $text);
+            
+            $escapedTitle = strtoupper($title);
+            $escapedTitle = preg_replace('/\s+/','\\s*',$escapedTitle);
+            $pattern2 = "/($escapedTitle.*?)(?=\d+\.\s|$|\.{4,})/siu";
+            //$pattern2 = '/('.$titleChapter.'[\s\S]*?)(?=\d+\.\s|$|\.{4,})/siu';
 
-            $titleChapter = strtoupper($title);
-            $pattern2 = "/($titleChapter.*?)(?=\d+\.\s|$|\.{4,})/siu"; //"/([\S\s]*)/" para testar tudo
-            //$pattern2 = "/(\d+\s\d+\.\sTORNAI VOSSAS VIDAS O MAIS\s+SIMPLES POSSÍVEL)/";
             if(preg_match($pattern2, $text, $matches)){
                 $capitulo =  $matches[1];
             }
-            echo "<br><br>Texto procurado: $titleChapter";
+            echo "<br><br>Texto procurado: $escapedTitle";
             echo "<br><br>Texto Filtrado: <br> $capitulo";
         }
+
+        // function filterIndex($text, $start, $end){
+        //     $startPos = strpos($text, $start) + strlen($start);
+        //     $endPos = strpos($text, $end) + strlen($end);
+
+        //     if($endPos !== false){
+        //         return substr($text, $startPos, $endPos - $startPos);
+        //     }
+
+        //     return substr($text, $startPos);
+        // }
     ?>
 
     </p>
 </body>
 </html>
+
